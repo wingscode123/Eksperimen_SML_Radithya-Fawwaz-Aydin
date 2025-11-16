@@ -1,0 +1,37 @@
+name: Run Preprocessing Pipeline
+
+on:
+    push:
+        branches:
+            - main
+    pull_request:
+        branches:
+            - main
+    workflow_dispatch:
+
+jobs:
+    build-and-preprocess:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Set up Python 3.12.7
+              uses: actions/setup-python@v4
+              with:
+                python-version: '3.12.7'
+            
+            - name: Install depedencies
+              run: |
+               pip install --upgrade pip
+               pip install -r requirement.txt
+            
+            - name: Run preprocessing script
+              run: python preprocessing/automate_Radithya-Fawwaz-Aydin.py
+            
+            - name: Upload processed data artifact
+              uses: actions/upload-artifact@v4
+              with:
+                name: processed-dataset
+                path: preprocessing/dataset-coursera_preprocessing/
